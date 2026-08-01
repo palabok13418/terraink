@@ -40,13 +40,16 @@ export function normalizePosterSizeValue(
   value: unknown,
   fallbackValue: number,
   minCm: number,
-  maxCm: number,
+  // We keep maxCm here so other files don't break when they try to pass it in!
+  maxCm: number, 
 ): number {
   const parsed = Number(value);
   if (!Number.isFinite(parsed)) {
-    return clamp(fallbackValue, minCm, maxCm);
+    // Only enforce the minimum on the fallback
+    return Math.max(fallbackValue, minCm); 
   }
-  return clamp(parsed, minCm, maxCm);
+  // Only enforce the minimum on the user's input
+  return Math.max(parsed, minCm); 
 }
 
 export function formatLayoutCm(value: number): string {
